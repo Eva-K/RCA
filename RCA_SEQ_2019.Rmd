@@ -1,0 +1,244 @@
+---
+title: "RCA SEQ 2019"
+author: "E. Kovacs"
+date: "5 August 2019"
+output: html_document
+---
+# Load necessary packages and install
+
+```{r what you need}
+
+install.packages("tidyverse")
+install.packages("janitor")
+install.packages("skimr")
+install.packages("stringr")
+install.packages("data.table")
+install.packages("ggthemes")
+install.packages("RColorBrewer")
+install.packages("gmodels")
+install.packages("cowplot")
+
+
+library(tidyverse) # use install.packages("tidyverse") if receive an error message
+library(janitor) # use install.packages("janitor") if receive an error message
+library(skimr)  # use install.packages("skimr") if receive an error message
+library(stringr) # use install.packages("stringr") if receive an error message
+library(data.table)
+library(ggthemes)
+library(RColorBrewer)
+library(gmodels)
+library(cowplot)
+
+```
+
+# Graphic theme
+
+```{r Theme for stacked Bar plots}
+
+
+
+
+
+```
+
+# Read in the data
+# Column Headings
+# Unique Reef names
+# Unique Site Names
+
+```{r Read in the Data - what's in there?}
+
+#work desktop
+Fish <- read.csv("C:/Users/uqekovac/Documents/R/RCA/RCA/SEQ_Fish.csv")
+Substrate <- read.csv("C:/Users/uqekovac/Documents/R/RCA/RCA/SEQ_Substrate.csv")
+Impacts <- read.csv("C:/Users/uqekovac/Documents/R/RCA/RCA/SEQ_Impacts.csv")
+Inverts <- read.csv("C:/Users/uqekovac/Documents/R/RCA/RCA/SEQ_Inverts.csv")
+
+# laptop
+#Fish <- read.csv("/Users/evam-k/Desktop/Coding/HeronFigures/Data/Rec_full_coraltype.csv")
+
+# remove any unwanted data sets
+ rm(CT4)
+
+# or import through right click on file in Files window and then save as an asset as per below.
+ 
+# Make working copies of the files 
+Fish2 <- Fish
+Sub2 <- Substrate
+Impacts2 <- Impacts
+Inverts2 <- Inverts
+
+# explore the data
+head(Fish2)
+summary(Fish2)
+names(Fish2)
+
+#[1] "DATE"                      "REEF"                      "SITE"                      "RESEARCH_SITE"            
+ #[5] "BARRAMUNDI_COD_1"          "BUTTERFLYFISH_1"           "CORALTROUT_30_40CM_1"      "CORALTROUT_40_50CM_1"     
+ #[9] "CORALTROUT_50_60CM_1"      "CORALTROUT_GREATER_60CM_1" "CORALTROUT_TOTAL_1"        "GROUPER_30_40CM_1"        
+#[13] "GROUPER_40_50CM_1"         "GROUPER_50_60CM_1"         "GROUPER_GREATER_60CM_1"    "GROUPER_TOTAL_1"          
+#[17] "QUEENSLAND_GROUPER_1"      "HUMPHEAD_WRASSE_1"         "MORAY_EEL_1"               "BUMPHEAD_PARROTFISH_1"    
+#[21] "OTHER_PARROTFISH_1"        "SNAPPER_1"                 "SWEETLIPS_1"               "TUSK_FISH_1"              
+#[25] "EMPERORS_1"                "BARRAMUNDI_COD_2"          "BUTTERFLYFISH_2"           "CORALTROUT_30_40CM_2"     
+#[29] "CORALTROUT_40_50CM_2"      "CORALTROUT_50_60CM_2"      "CORALTROUT_GREATER_60CM_2" "CORALTROUT_TOTAL_2"       
+#[33] "GROUPER_30_40CM_2"         "GROUPER_40_50CM_2"         "GROUPER_50_60CM_2"         "GROUPER_GREATER_60CM_2"   
+#[37] "GROUPER_TOTAL_2"           "QUEENSLAND_GROUPER_2"      "HUMPHEAD_WRASSE_2"         "MORAY_EEL_2"              
+#[41] "BUMPHEAD_PARROTFISH_2"     "OTHER_PARROTFISH_2"        "SNAPPER_2"                 "SWEETLIPS_2"              
+#[45] "TUSK_FISH_2"               "EMPERORS_2"                "BARRAMUNDI_COD_3"          "BUTTERFLYFISH_3"          
+#[49] "CORALTROUT_30_40CM_3"      "CORALTROUT_40_50CM_3"      "CORALTROUT_50_60CM_3"      "CORALTROUT_GREATER_60CM_3"
+#[53] "CORALTROUT_TOTAL_3"        "GROUPER_30_40CM_3"         "GROUPER_40_50CM_3"         "GROUPER_50_60CM_3"        
+#[57] "GROUPER_GREATER_60CM_3"    "GROUPER_TOTAL_3"           "QUEENSLAND_GROUPER_3"      "HUMPHEAD_WRASSE_3"        
+#[61] "MORAY_EEL_3"               "BUMPHEAD_PARROTFISH_3"     "OTHER_PARROTFISH_3"        "SNAPPER_3"                
+#[65] "SWEETLIPS_3"               "TUSK_FISH_3"               "EMPERORS_3"                "BARRAMUNDI_COD_4"         
+#[69] "BUTTERFLYFISH_4"           "CORALTROUT_30_40CM_4"      "CORALTROUT_40_50CM_4"      "CORALTROUT_50_60CM_4"     
+#[73] "CORALTROUT_GREATER_60CM_4" "CORALTROUT_TOTAL_4"        "GROUPER_30_40CM_4"         "GROUPER_40_50CM_4"        
+#[77] "GROUPER_50_60CM_4"         "GROUPER_GREATER_60CM_4"    "GROUPER_TOTAL_4"           "QUEENSLAND_GROUPER_4"     
+#[81] "HUMPHEAD_WRASSE_4"         "MORAY_EEL_4"               "BUMPHEAD_PARROTFISH_4"     "OTHER_PARROTFISH_4"       
+#[85] "SNAPPER_4"                 "SWEETLIPS_4"               "TUSK_FISH_4"               "EMPERORS_4"           
+
+head(Sub2)
+summary(Sub2)
+names(Sub2)
+
+#[1] "DATE"          "REEF"          "SITE"          "RESEARCH_SITE" "SUBSTRATE_000" "SUBSTRATE_001" "SUBSTRATE_002" "SUBSTRATE_003"
+ # [9] "SUBSTRATE_004" "SUBSTRATE_005" "SUBSTRATE_006" "SUBSTRATE_007" "SUBSTRATE_008" "SUBSTRATE_009" "SUBSTRATE_010" "SUBSTRATE_011"
+ #[17] "SUBSTRATE_012" "SUBSTRATE_013" "SUBSTRATE_014" "SUBSTRATE_015" "SUBSTRATE_016" "SUBSTRATE_017" "SUBSTRATE_018" "SUBSTRATE_019"
+ #[25] "SUBSTRATE_020" "SUBSTRATE_021" "SUBSTRATE_022" "SUBSTRATE_023" "SUBSTRATE_024" "SUBSTRATE_025" "SUBSTRATE_026" "SUBSTRATE_027"
+ #[33] "SUBSTRATE_028" "SUBSTRATE_029" "SUBSTRATE_030" "SUBSTRATE_031" "SUBSTRATE_032" "SUBSTRATE_033" "SUBSTRATE_034" "SUBSTRATE_035"
+ #[41] "SUBSTRATE_036" "SUBSTRATE_037" "SUBSTRATE_038" "SUBSTRATE_039" "SUBSTRATE_040" "SUBSTRATE_041" "SUBSTRATE_042" "SUBSTRATE_043"
+ #[49] "SUBSTRATE_044" "SUBSTRATE_045" "SUBSTRATE_046" "SUBSTRATE_047" "SUBSTRATE_048" "SUBSTRATE_049" "SUBSTRATE_050" "SUBSTRATE_051"
+ #[57] "SUBSTRATE_052" "SUBSTRATE_053" "SUBSTRATE_054" "SUBSTRATE_055" "SUBSTRATE_056" "SUBSTRATE_057" "SUBSTRATE_058" "SUBSTRATE_059"
+ #[65] "SUBSTRATE_060" "SUBSTRATE_061" "SUBSTRATE_062" "SUBSTRATE_063" "SUBSTRATE_064" "SUBSTRATE_065" "SUBSTRATE_066" "SUBSTRATE_067"
+ #[73] "SUBSTRATE_068" "SUBSTRATE_069" "SUBSTRATE_070" "SUBSTRATE_071" "SUBSTRATE_072" "SUBSTRATE_073" "SUBSTRATE_074" "SUBSTRATE_075"
+ #[81] "SUBSTRATE_076" "SUBSTRATE_077" "SUBSTRATE_078" "SUBSTRATE_079" "SUBSTRATE_080" "SUBSTRATE_081" "SUBSTRATE_082" "SUBSTRATE_083"
+ #[89] "SUBSTRATE_084" "SUBSTRATE_085" "SUBSTRATE_086" "SUBSTRATE_087" "SUBSTRATE_088" "SUBSTRATE_089" "SUBSTRATE_090" "SUBSTRATE_091"
+ #[97] "SUBSTRATE_092" "SUBSTRATE_093" "SUBSTRATE_094" "SUBSTRATE_095" "SUBSTRATE_096" "SUBSTRATE_097" "SUBSTRATE_098" "SUBSTRATE_099"
+#[105] "SUBSTRATE_100" "SUBSTRATE_101" "SUBSTRATE_102" "SUBSTRATE_103" "SUBSTRATE_104" "SUBSTRATE_105" "SUBSTRATE_106" "SUBSTRATE_107"
+#[113] "SUBSTRATE_108" "SUBSTRATE_109" "SUBSTRATE_110" "SUBSTRATE_111" "SUBSTRATE_112" "SUBSTRATE_113" "SUBSTRATE_114" "SUBSTRATE_115"
+#[121] "SUBSTRATE_116" "SUBSTRATE_117" "SUBSTRATE_118" "SUBSTRATE_119" "SUBSTRATE_120" "SUBSTRATE_121" "SUBSTRATE_122" "SUBSTRATE_123"
+#[129] "SUBSTRATE_124" "SUBSTRATE_125" "SUBSTRATE_126" "SUBSTRATE_127" "SUBSTRATE_128" "SUBSTRATE_129" "SUBSTRATE_130" "SUBSTRATE_131"
+#[137] "SUBSTRATE_132" "SUBSTRATE_133" "SUBSTRATE_134" "SUBSTRATE_135" "SUBSTRATE_136" "SUBSTRATE_137" "SUBSTRATE_138" "SUBSTRATE_139"
+#[145] "SUBSTRATE_140" "SUBSTRATE_141" "SUBSTRATE_142" "SUBSTRATE_143" "SUBSTRATE_144" "SUBSTRATE_145" "SUBSTRATE_146" "SUBSTRATE_147"
+#[153] "SUBSTRATE_148" "SUBSTRATE_149" "SUBSTRATE_150" "SUBSTRATE_151" "SUBSTRATE_152" "SUBSTRATE_153" "SUBSTRATE_154" "SUBSTRATE_155"
+#[161] "SUBSTRATE_156" "SUBSTRATE_157" "SUBSTRATE_158" "SUBSTRATE_159" "MACROALGAE_1"  "MACROALGAE_2"  "MACROALGAE_3"  "MACROALGAE_4" 
+
+unique(Sub2$REEF)
+#[1] Amity Point                 Bulcock Beach               Cook Island                 Currimundi Reef            
+ #[5] Dead Mans Reef              Flat Rock Island            Flinders Reef               Goat Island                
+ #[9] Gold Coast Seaway Reefs     Green Island                Hancocks Shoal              Hook Island                
+#[13] Hutchinsons Shoal           Inner Gneerings             Jew Shoal                   Kings Beach                
+#[17] Kirra Reef                  Little Halls Reef           Macleay Island              Marietta Dal               
+#[21] Mermaid Reef                Mooloolah River             Mud Island                  Mudjimba (Old Woman) Island
+#[25] Myora Reef                  Narrowneck Reef             Palm Beach Reef             Peel Island                
+#[29] Shag Rock Island            St Helena                   Wavebreak Island
+
+unique(Sub2$SITE)
+#[1] Amity Point                 Boardwalk                   Cook Island                 Currimundi Reef            
+ #[5] Dead Mans                   Shark Gulley                The Nursery                 Alden's Cave               
+ #[9] Irish Pirate                Nursery                     Goat Island East            Goat Island West           
+#[13] South-West Wall             The Pipe                    Green Island East           Green Island North         
+#[17] Green Island West           Hancocks Shoal              Butterfly Bay               Luncheon Bay               
+#[21] Hutchinson's Shoal          The Caves                   The Pinnacles (The Pin)     Kings Beach Reef           
+#[25] Outer Kirra Reef            Little Halls Reef           Macleay Island              Marietta Dal Reef          
+#[29] Mermaid Reef                La Balsa                    Coral Galore                Rubble Patch               
+#[33] NorthWest Reef              The Ledge (Mudjimba Island) Myora Reef                  Narrowneck Artificial Reef 
+#[37] Palm Beach Reef             Peel Island East            Peel Island North           Peel Island Northeast      
+#[41] Shag Rock East              Shag Rock West              Palindrome                  Ray of Sunshine            
+#[45] Wavebreak Island North   
+
+head(Impacts2)
+summary(Impacts2)
+names(Impacts2)
+#[1] "DATE"                   "REEF"                   "SITE"                   "RESEARCH_SITE"          "BLEACHING_SURFACE_1"   
+ #[6] "BLEACHING_POPULATION_1" "DAMAGE_ANCHOR_1"        "DAMAGE_DYNAMITE_1"      "DAMAGE_OTHER_1"         "DISEASE_COLONIES_1"    
+#[11] "DISEASE_POPULATION_1"   "SCARS_COTS_1"           "SCARS_DRUPELLA_1"       "SCARS_UNKNOWN_1"        "FISHINGLINE_1"         
+#[16] "TRASH_FISHNETS_1"       "TRASH_GENERAL_1"        "RARE_ANIMALS_1"         "BLEACHING_SURFACE_2"    "BLEACHING_POPULATION_2"
+#[21] "DAMAGE_ANCHOR_2"        "DAMAGE_DYNAMITE_2"      "DAMAGE_OTHER_2"         "DISEASE_COLONIES_2"     "DISEASE_POPULATION_2"  
+#[26] "SCARS_COTS_2"           "SCARS_DRUPELLA_2"       "SCARS_UNKNOWN_2"        "FISHINGLINE_2"          "TRASH_FISHNETS_2"      
+#[31] "TRASH_GENERAL_2"        "RARE_ANIMALS_2"         "BLEACHING_SURFACE_3"    "BLEACHING_POPULATION_3" "DAMAGE_ANCHOR_3"       
+#[36] "DAMAGE_DYNAMITE_3"      "DAMAGE_OTHER_3"         "DISEASE_COLONIES_3"     "DISEASE_POPULATION_3"   "SCARS_COTS_3"          
+#[41] "SCARS_DRUPELLA_3"       "SCARS_UNKNOWN_3"        "FISHINGLINE_3"          "TRASH_FISHNETS_3"       "TRASH_GENERAL_3"       
+#[46] "RARE_ANIMALS_3"         "BLEACHING_SURFACE_4"    "BLEACHING_POPULATION_4" "DAMAGE_ANCHOR_4"        "DAMAGE_DYNAMITE_4"     
+#[51] "DAMAGE_OTHER_4"         "DISEASE_COLONIES_4"     "DISEASE_POPULATION_4"   "SCARS_COTS_4"           "SCARS_DRUPELLA_4"      
+#[56] "SCARS_UNKNOWN_4"        "FISHINGLINE_4"          "TRASH_FISHNETS_4"       "TRASH_GENERAL_4"        "RARE_ANIMALS_4"  
+
+head(Inverts2)
+summary(Inverts2)
+names(Inverts2)
+
+ #[1] "DATE"                     "REEF"                     "SITE"                     "RESEARCH_SITE"            "ANEMOME_FISH_1"          
+ # [6] "ANEMOME_NOFISH_1"         "ANEMOME_TOTAL_1"          "BANDEDCORALSHRIMP_1"      "COTS_LESS_5CM_1"          "COTS_6_15CM_1"           
+ #[11] "COTS_16_25CM_1"           "COTS_GREATER_25CM_1"      "COTS_TOTAL_1"             "CLAM_LESS_10CM_1"         "CLAM_10_20CM_1"          
+ #[16] "CLAM_20_30CM_1"           "CLAM_30_40CM_1"           "CLAM_40_50CM_1"           "CLAM_GREATER_50CM_1"      "CLAM_TOTAL_1"            
+ #[21] "LOBSTER_1"                "DRUPELLA_1"               "TRITON_1"                 "TROCHUS_1"                "CUCUMBER_PINKFISH_1"     
+ #[26] "CUCUMBER_GREENFISH_1"     "CUCUMBER_REDFISH_1"       "CUCUMBER_TOTAL_1"         "URCHIN_COLLECTOR_1"       "URCHIN_DIADEMA_1"        
+ #[31] "URCHIN_PENCIL_1"          "CUCUMBER_BLACKTEATFISH_1" "CUCUMBER_VIENNAROLL_1"    "CUCUMBER_SPOTTEDDICK_1"   "ANEMOME_FISH_2"          
+ #[36] "ANEMOME_NOFISH_2"         "ANEMOME_TOTAL_2"          "BANDEDCORALSHRIMP_2"      "COTS_LESS_5CM_2"          "COTS_6_15CM_2"           
+ #[41] "COTS_16_25CM_2"           "COTS_GREATER_25CM_2"      "COTS_TOTAL_2"             "CLAM_LESS_10CM_2"         "CLAM_10_20CM_2"          
+ #[46] "CLAM_20_30CM_2"           "CLAM_30_40CM_2"           "CLAM_40_50CM_2"           "CLAM_GREATER_50CM_2"      "CLAM_TOTAL_2"            
+ #[51] "LOBSTER_2"                "DRUPELLA_2"               "TRITON_2"                 "TROCHUS_2"                "CUCUMBER_PINKFISH_2"     
+ #[56] "CUCUMBER_GREENFISH_2"     "CUCUMBER_REDFISH_2"       "CUCUMBER_TOTAL_2"         "URCHIN_COLLECTOR_2"       "URCHIN_DIADEMA_2"        
+ #[61] "URCHIN_PENCIL_2"          "CUCUMBER_BLACKTEATFISH_2" "CUCUMBER_VIENNAROLL_2"    "CUCUMBER_SPOTTEDDICK_2"   "ANEMOME_FISH_3"          
+ #[66] "ANEMOME_NOFISH_3"         "ANEMOME_TOTAL_3"          "BANDEDCORALSHRIMP_3"      "COTS_LESS_5CM_3"          "COTS_6_15CM_3"           
+ #[71] "COTS_16_25CM_3"           "COTS_GREATER_25CM_3"      "COTS_TOTAL_3"             "CLAM_LESS_10CM_3"         "CLAM_10_20CM_3"          
+ #[76] "CLAM_20_30CM_3"           "CLAM_30_40CM_3"           "CLAM_40_50CM_3"           "CLAM_GREATER_50CM_3"      "CLAM_TOTAL_3"            
+ #[81] "LOBSTER_3"                "DRUPELLA_3"               "TRITON_3"                 "TROCHUS_3"                "CUCUMBER_PINKFISH_3"     
+ #[86] "CUCUMBER_GREENFISH_3"     "CUCUMBER_REDFISH_3"       "CUCUMBER_TOTAL_3"         "URCHIN_COLLECTOR_3"       "URCHIN_DIADEMA_3"        
+ #[91] "URCHIN_PENCIL_3"          "CUCUMBER_BLACKTEATFISH_3" "CUCUMBER_VIENNAROLL_3"    "CUCUMBER_SPOTTEDDICK_3"   "ANEMOME_FISH_4"          
+ #[96] "ANEMOME_NOFISH_4"         "ANEMOME_TOTAL_4"          "BANDEDCORALSHRIMP_4"      "COTS_LESS_5CM_4"          "COTS_6_15CM_4"           
+#[101] "COTS_16_25CM_4"           "COTS_GREATER_25CM_4"      "COTS_TOTAL_4"             "CLAM_LESS_10CM_4"         "CLAM_10_20CM_4"          
+#[106] "CLAM_20_30CM_4"           "CLAM_30_40CM_4"           "CLAM_40_50CM_4"           "CLAM_GREATER_50CM_4"      "CLAM_TOTAL_4"            
+#[111] "LOBSTER_4"                "DRUPELLA_4"               "TRITON_4"                 "TROCHUS_4"                "CUCUMBER_PINKFISH_4"     
+#[116] "CUCUMBER_GREENFISH_4"     "CUCUMBER_REDFISH_4"       "CUCUMBER_TOTAL_4"         "URCHIN_COLLECTOR_4"       "URCHIN_DIADEMA_4"        
+#[121] "URCHIN_PENCIL_4"          "CUCUMBER_BLACKTEATFISH_4" "CUCUMBER_VIENNAROLL_4"    "CUCUMBER_SPOTTEDDICK_4"
+
+```
+
+# Tidy the Substrate Data
+
+```{r Substrate data}
+
+# Tidy
+
+janitor::clean_names(Sub2)
+names(Sub2)
+
+# Didn't change anything
+
+```
+
+# Summarise the Data
+
+```{r Summarise the Data}
+
+
+
+```
+
+
+
+# Make stacked Bar plots
+
+```{r Stacked bar Plots}
+
+p <- ggplot(Sub2, x = Site, y = )
+
+```
+
+
+```{r Change Column headings}
+
+# Change column headings
+
+# make more memorable column headings
+
+names(CoralType)[names(CoralType) == "fg"] <- "Cover"
+names(CoralType)[names(CoralType) == "lng"] <- "long"
+names(CoralType)[names(CoralType) == "Form"] <- "Type"
+names(CoralType)
+head(CoralType)
+CoralType
+
+
+```
+
